@@ -1,0 +1,16 @@
+name: CraftRoyal
+version: '1.0-Dev'
+main: desue.craftRoyal.CraftRoyal
+api-version: '1.21'
+
+commands:
+  summonTarget:
+    description: Spawn a test target marker at your location
+    usage: /<command>
+    permission: craftroyal.debug
+    permission-message: You don't have permission to run this command.
+
+permissions:
+  craftroyal.debug:
+    description: Access debug commands for CraftRoyal
+    default: op
