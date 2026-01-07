@@ -58,7 +58,7 @@ public final class CraftRoyal extends JavaPlugin {
             }
             Player player = (Player) sender;
             // spawn marker at player's current location
-            LivingEntity target = Targeting.generateMarker(player.getWorld(), player.getLocation(), "TestTarget-"+Math.round(Math.random()*100));
+            LivingEntity target = Targeting.generateMarker(player.getWorld(), player.getLocation(), "TestTarget-" + Math.round(Math.random() * 100));
             target.setInvisible(false); // make visible for testing
             target.getPersistentDataContainer().set(
                     new org.bukkit.NamespacedKey(plugin, "troopID"),
@@ -66,6 +66,22 @@ public final class CraftRoyal extends JavaPlugin {
                     UUID.randomUUID().toString()
             );
             player.sendMessage("Target marker spawned at your location.");
+            return true;
+        }else if (command.getName().equalsIgnoreCase("spawnTower")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("This command may only be run by a player.");
+                return true;
+            }
+            Player player = (Player) sender;
+            LivingEntity target = Targeting.generateTowerMarker(player.getWorld(), player.getLocation(), "TowerMarker-" + Math.round(Math.random() * 100));
+            target.setInvisible(false); // make visible for testing
+            target.getPersistentDataContainer().set(
+                    new org.bukkit.NamespacedKey(plugin, "troopID"),
+                    PersistentDataType.STRING,
+                    UUID.randomUUID().toString()
+            );
+
+            sender.sendMessage("Spawned a tower at current location.");
             return true;
         }
         return false;

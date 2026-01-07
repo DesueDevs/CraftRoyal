@@ -1,6 +1,7 @@
 package desue.craftRoyal.Events;
 
 import desue.craftRoyal.Troops.Flying.Minion;
+import desue.craftRoyal.Troops.Melee.HogRider;
 import desue.craftRoyal.Troops.Melee.Knight;
 import desue.craftRoyal.Troops.Melee.MiniPekka;
 import desue.craftRoyal.Troops.Ranged.Musketeer;
@@ -24,7 +25,7 @@ public class CreatureSpawn implements Listener {
     private final TroopKeys troopKeys = TroopKeys.getInstance();
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent creatureSpawnEvent) {
-        if (creatureSpawnEvent.getEntityType() != EntityType.VINDICATOR && creatureSpawnEvent.getEntityType() != EntityType.COPPER_GOLEM && creatureSpawnEvent.getEntityType() != EntityType.PILLAGER && creatureSpawnEvent.getEntityType() != EntityType.CHICKEN) { // Temp test for vindicators
+        if (creatureSpawnEvent.getEntityType() != EntityType.VINDICATOR && creatureSpawnEvent.getEntityType() != EntityType.COPPER_GOLEM && creatureSpawnEvent.getEntityType() != EntityType.PILLAGER && creatureSpawnEvent.getEntityType() != EntityType.CHICKEN && creatureSpawnEvent.getEntityType() != EntityType.PIG) { // Temp test for vindicators
             return;
         }
         Entity entity = creatureSpawnEvent.getEntity();
@@ -57,6 +58,9 @@ public class CreatureSpawn implements Listener {
                 // Just for testing purposes
                 troop = new Minion(1, (Mob) creatureSpawnEvent.getEntity());
                 entity.setGravity(false);
+                break;
+            case PIG:
+                troop = new HogRider(1, (Mob) creatureSpawnEvent.getEntity());
                 break;
             default:
                 entity.setCustomName("Unknown Troop");

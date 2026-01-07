@@ -14,6 +14,30 @@ public class Targeting {
     private static final TroopKeys troopKeys = TroopKeys.getInstance();
     private static final TroopManager troopManager = TroopManager.getInstance();
 
+
+    public static LivingEntity generateTowerMarker(World w, org.bukkit.Location target, String name) {
+        ArmorStand marker = (ArmorStand) w.spawnEntity(target, EntityType.ARMOR_STAND);
+        marker.setVisible(false);
+        marker.setInvulnerable(true);
+        marker.setMarker(true); // Make it a 'marker' (no hitbox)
+        marker.setGravity(false);
+        marker.setPersistent(true);
+        marker.setCustomName(name);
+        marker.setCustomNameVisible(false);
+
+        // Initialize persistent data for HP and name so other systems (like Knights) can treat this marker as a valid target
+        try {
+            if (!marker.getPersistentDataContainer().has(troopKeys.hpKey, PersistentDataType.FLOAT)) {
+                marker.getPersistentDataContainer().set(troopKeys.hpKey, PersistentDataType.FLOAT, 500.0f);
+            }
+            marker.getPersistentDataContainer().set(troopKeys.troopIDKey, PersistentDataType.STRING, name != null ? name : "TowerMarker");
+            marker.getPersistentDataContainer().set(troopKeys.isBuildingKey, PersistentDataType.BOOLEAN, true);
+        } catch (Throwable t) {
+            CraftRoyal.getInstance().getLogger().warning("Targeting: failed to initialize tower marker persistent data: " + t.getMessage());
+        }
+
+        return marker;
+    }
     /**
      * Generates an invisible, invulnerable Armor Stand marker at the specified location with the given name.
      * This marker can be used as a target for troops and other systems.
@@ -64,7 +88,7 @@ public class Targeting {
                 continue; // Skip entities that are not troops
             }
 
-            if (favoriteTarget == Troop.FavoriteTargets.Buildings && nearbyEntity.hasMetadata("isBuilding")) {
+            if (favoriteTarget == Troop.FavoriteTargets.Buildings && !Boolean.TRUE.equals(nearbyEntity.getPersistentDataContainer().get(troopKeys.isBuildingKey, PersistentDataType.BOOLEAN))) {
                 continue; // Skip non-building targets if FavoriteTargets is Buildings
             }
 

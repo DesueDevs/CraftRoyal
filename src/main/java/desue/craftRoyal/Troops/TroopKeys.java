@@ -20,4 +20,5 @@ public class TroopKeys {
     public NamespacedKey levelKey = new NamespacedKey(plugin, "TroopLevel");
     public NamespacedKey isTroopKey = new org.bukkit.NamespacedKey(plugin, "isTroop");
     public NamespacedKey troopIDKey = new org.bukkit.NamespacedKey(plugin, "troopID");
+    public NamespacedKey isBuildingKey = new org.bukkit.NamespacedKey(plugin, "isBuildingKey");
 }

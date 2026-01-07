@@ -9,6 +9,11 @@ commands:
     usage: /<command>
     permission: craftroyal.debug
     permission-message: You don't have permission to run this command.
+  spawnTower:
+    description: Spawn a test tower structure at your location
+    usage: /<command>
+    permission: craftroyal.debug
+    permission-message: You don't have permission to run this command.
 
 permissions:
   craftroyal.debug:
