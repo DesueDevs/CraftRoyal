@@ -1,5 +1,6 @@
 package desue.craftRoyal.Events;
 
+import desue.craftRoyal.Cards.Card;
 import desue.craftRoyal.Mechanics.UseCard;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,6 +15,7 @@ public class SwingHand implements Listener {
     public void onSwingHand(PlayerInteractEvent event) {
         if (event.getAction().toString().contains("RIGHT_CLICK")) {
             Block block = UseCard.findPlacementBlock(event.getPlayer());
+
             event.getPlayer().sendMessage("You are looking at block: " + block.getType().toString() + "at " + block.getLocation().toString());
         }
     }
