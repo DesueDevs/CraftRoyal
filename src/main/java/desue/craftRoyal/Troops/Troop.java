@@ -3,14 +3,19 @@ package desue.craftRoyal.Troops;
 import desue.craftRoyal.CraftRoyal;
 import desue.craftRoyal.Mechanics.Targeting;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class Troop {
     protected Logger logger = CraftRoyal.getInstance().getLogger();
+    private final JavaPlugin plugin = CraftRoyal.getInstance().plugin;
 
     public Mob mob;
     protected float health = 0;
@@ -26,6 +31,7 @@ public class Troop {
     protected int ticksTillNextAttack = 0; // make this instance-level so different troops have independent cooldowns
 
     protected TroopKeys troopKeys = TroopKeys.getInstance();
+    private final TroopManager troopManager = TroopManager.getInstance();
 
     public Troop(String troopName, Mob mob, float health , FavoriteTargets favoriteTarget, TroopTypes troopType, float damagePerAttack, int attackSpeed, float movementSpeed, float attackRange) {
         this.troopName = troopName;
@@ -45,7 +51,32 @@ public class Troop {
      * Placeholder for any additional initialization logic for subclasses
      */
     protected void troopCreation() {
-        // Placeholder for any additional initialization logic
+        Entity entity = mob;
+        String TroopID = UUID.randomUUID().toString();
+        entity.getPersistentDataContainer().set(
+                troopKeys.isTroopKey,
+                PersistentDataType.BOOLEAN,
+                true
+        );
+        entity.getPersistentDataContainer().set(
+                troopKeys.troopIDKey,
+                PersistentDataType.STRING,
+                TroopID
+        );
+        entity.setInvulnerable(true);
+        entity.setCustomName(troopName + " [Lv. " + entity.getPersistentDataContainer().get(troopKeys.levelKey, PersistentDataType.INTEGER) + "]");
+        entity.setCustomNameVisible(true);
+
+        troopManager.addTroop(TroopID, this);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                if(!(Targeting())) {
+                    this.cancel(); // Stop the task if Targeting returns false
+                }
+            }
+        }.runTaskTimer(plugin, 1L, 1L);
     }
 
     // Lazily read the troop name from the entity's PersistentDataContainer (falls back to entity type)
@@ -107,7 +138,7 @@ public class Troop {
     protected LivingEntity FindNewTarget() {
         LivingEntity newTarget = Targeting.FindClosestTarget(this);
         if (newTarget != null) {
-            logger.info(getTroopName()+"-"+this.mob.getEntityId()+": found new target "+newTarget.getEntityId());
+           // logger.info(getTroopName()+"-"+this.mob.getEntityId()+": found new target "+newTarget.getEntityId());
             this.target = newTarget;
         }
         return newTarget;
@@ -194,7 +225,7 @@ public class Troop {
 
         targetHP -= this.damagePerAttack;
         this.target.getPersistentDataContainer().set(troopKeys.hpKey, PersistentDataType.FLOAT, targetHP);
-        logger.info(getTroopName()+"-"+this.mob.getEntityId()+": attacked target for "+this.damagePerAttack+" damage. Target HP now "+targetHP + ". and cooldown set to "+this.ticksTillNextAttack+" ticks.");
+        //logger.info(getTroopName()+"-"+this.mob.getEntityId()+": attacked target for "+this.damagePerAttack+" damage. Target HP now "+targetHP + ". and cooldown set to "+this.ticksTillNextAttack+" ticks.");
         if (targetHP <= 0) {
             logger.info(getTroopName()+"-"+this.mob.getEntityId()+": target("+this.target.getEntityId()+") has died, removing target.");
             this.target.remove(); // remove target if HP is 0 or below

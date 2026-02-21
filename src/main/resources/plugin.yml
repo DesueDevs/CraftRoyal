@@ -14,6 +14,11 @@ commands:
     usage: /<command>
     permission: craftroyal.debug
     permission-message: You don't have permission to run this command.
+  getTroopCard:
+    description: Get a test troop card item
+    usage: /<command>
+    permission: craftroyal.debug
+    permission-message: You don't have permission to run this command.
 
 permissions:
   craftroyal.debug:

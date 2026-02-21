@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class Card {
     protected Logger logger = CraftRoyal.getInstance().getLogger();
 
-    protected LinkedList<Entity> entities = null;
+    protected LinkedList<Entity> entities = new LinkedList<>();
 
     protected Class<? extends Troop> troopClass;
     protected String cardname = "";
@@ -40,17 +40,7 @@ public class Card {
         this.troopClass = troopClass;
     }
 
-    public Book getCardItem(){
-        Collection<Component> pages = new HashSet<>();
-        pages.add(Component.text(elixerCost));
-        pages.add(Component.text(spawnedType.toString()));
-        pages.add(Component.text(spawnTroopLevel));
-        pages.add(Component.text(numberOfTroops));
-
-        return Book.book(Component.text(cardname),Component.text("CraftRoyal"), pages);
-    }
-
-    protected void SpawnTroops(Location SpawnLoc) {
+    public void spawnTroops(Location SpawnLoc) {
         // Basic Validations
         if (this.player == null) {
             logger.warning("Card: SpawnTroops called but player is null");
@@ -74,12 +64,14 @@ public class Card {
         }
 
         // Elixer Check
-        if (this.player.getExpToLevel() < this.elixerCost) {
+        logger.info(String.valueOf(this.player.getLevel()));
+
+        if (this.player.getLevel() < this.elixerCost) {
             this.player.sendMessage("Not enough elixer to play this card!");
             return;
         }else {
             // Deduct Elixer
-            this.player.setLevel(this.player.getExpToLevel() - this.elixerCost);
+            this.player.setLevel(this.player.getLevel() - this.elixerCost);
         }
 
         // Summon troops

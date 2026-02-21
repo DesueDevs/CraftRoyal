@@ -1,7 +1,7 @@
 A Card is an Book item. The following is a list of rules for that book item:
 - The Author should be "CraftRoyal"
 - The Title should be the name of the card
-- Page 0 should be the elixir cost
-- Page 1 should be the spawned troop entityType
-- Page 2 should be the level of the card
-- Page 3 should be the number of troops spawned
+- Page 1 should be the elixir cost
+- Page 2 should be the spawned troop entityType
+- Page 3 should be the level of the card
+- Page 4 should be the number of troops spawned

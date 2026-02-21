@@ -21,6 +21,7 @@ public class Minion extends Troop {
                 5.0f
         );
         target = null;
+        entity.setGravity(false);
 
         try {
             entity.getPersistentDataContainer().set(troopKeys.nameKey, PersistentDataType.STRING, "Minion");

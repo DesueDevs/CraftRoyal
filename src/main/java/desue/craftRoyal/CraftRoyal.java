@@ -1,10 +1,14 @@
 package desue.craftRoyal;
 
+import desue.craftRoyal.Cards.Card;
+import desue.craftRoyal.Cards.CardInfo;
+import desue.craftRoyal.Cards.CardManager;
 import desue.craftRoyal.Events.SwingHand;
 import desue.craftRoyal.Mechanics.Targeting;
 import desue.craftRoyal.Events.CreatureSpawn;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -30,11 +34,11 @@ public final class CraftRoyal extends JavaPlugin {
 
         // Plugin startup logic
         // Initialize CreatureSpawn listener (registers itself in constructor)
-        try {
-            this.getServer().getPluginManager().registerEvents(new CreatureSpawn(), plugin);
-        } catch (Throwable t) {
-            getLogger().log(Level.SEVERE, "Failed to register CreatureSpawn listener", t);
-        }
+//        try {
+//            this.getServer().getPluginManager().registerEvents(new CreatureSpawn(), plugin);
+//        } catch (Throwable t) {
+//            getLogger().log(Level.SEVERE, "Failed to register CreatureSpawn listener", t);
+//        }
         try {
             this.getServer().getPluginManager().registerEvents(new SwingHand(), plugin);
         } catch (Throwable t) {
@@ -51,6 +55,32 @@ public final class CraftRoyal extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("getTroopCard")) {
+            CardInfo cardInfo = null;
+            switch (args[0].toLowerCase()) {
+                case "knight":
+                    cardInfo = new CardInfo("Knight Card", 3, EntityType.VINDICATOR, 1, 1);
+                    break;
+                case "musketeer":
+                    cardInfo = new CardInfo("Musketeer Card", 4, EntityType.PILLAGER, 1, 1);
+                    break;
+                case "minipekka":
+                    cardInfo = new CardInfo("MiniPekka Card", 4, EntityType.COPPER_GOLEM, 1, 1);
+                    break;
+                case "hogrider":
+                    cardInfo = new CardInfo("Hog Rider Card", 4, EntityType.PIG, 1, 1);
+                    break;
+                case "minion":
+                    cardInfo = new CardInfo("Minion Card", 3, EntityType.CHICKEN, 1, 1);
+                    break;
+
+                default:
+                    sender.sendMessage("Unknown troop type: " + args[0]);
+            }
+            Player player = (Player) sender;
+            player.give(CardManager.getInstance().createCardItem(cardInfo));
+            return true;
+        }
         if (command.getName().equalsIgnoreCase("summonTarget")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage("This command may only be run by a player.");

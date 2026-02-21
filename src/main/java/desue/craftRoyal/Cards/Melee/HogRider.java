@@ -4,21 +4,22 @@ import desue.craftRoyal.Cards.Card;
 import desue.craftRoyal.Troops.Melee.Knight;
 import desue.craftRoyal.Troops.Troop;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
-public class KnightCard extends Card {
+public class HogRider extends Card {
     public static EntityType getEntityType() {
-        return EntityType.VINDICATOR;
+        return EntityType.PIG;
     }
-    public KnightCard(Player player, int elixirCost, int troopLevel, int spawnNumber, Location spawnLocation) {
+    public HogRider(Player player, int elixirCost, int troopLevel, int spawnNumber, Location spawnLocation) {
         super(
-                "Knight " + troopLevel,
+                "Hog Rider " + troopLevel,
                 player,
                 elixirCost,
                 getEntityType(),
                 troopLevel,
                 spawnNumber,
-                desue.craftRoyal.Troops.Melee.Knight.class
+                desue.craftRoyal.Troops.Melee.HogRider.class
         );
         spawnTroops(spawnLocation);
     }
