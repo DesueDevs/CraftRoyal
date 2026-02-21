@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.Nullable;
 
-public class UseCard {
+public class CardUsage {
     public static boolean isCard(@Nullable ItemStack item ) {
         if (item == null) {
             return false;
