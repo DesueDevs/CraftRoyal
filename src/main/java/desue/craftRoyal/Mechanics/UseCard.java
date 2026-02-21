@@ -1,39 +1,42 @@
 package desue.craftRoyal.Mechanics;
 
-import desue.craftRoyal.Cards.Card;
-import net.kyori.adventure.text.Component;
+import desue.craftRoyal.Cards.CardInfo;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class UseCard {
-    public Card usedCard(ItemStack item) {
-        String[] itemDisplayName = String.valueOf(item.displayName()).split(":");
-
-        String troopName = itemDisplayName[0].trim();
-        int level = Integer.parseInt(itemDisplayName[1].replace("Lvl ", "").trim());
-
-        List<Component> itemLore = item.lore();
-        int elixerCost = 0;
-
-        int numberOfTroops = 0;
-        return null;
-    }
-
-    public boolean spawnTroop(Card card, Block block) {
-        if (card == null || block == null) {
+    public static boolean isCard(@Nullable ItemStack item ) {
+        if (item == null) {
             return false;
         }
-        // Implement troop spawning logic here, using card.spawnedTroop and block location
+        if (!(item.getItemMeta() instanceof BookMeta)) {
+            return false;
+        }
+        BookMeta meta = (BookMeta) item.getItemMeta();
+        if (meta.author().toString() != "CraftRoyal") {
+            return false;
+        }
         return true;
     }
+
+    public static CardInfo getCardInfo(ItemStack item) {
+        if (!isCard(item)) {
+            return null;
+        }
+        BookMeta meta = (BookMeta) item.getItemMeta();
+        String cardName = meta.title().toString();
+        int elixirCost = Integer.parseInt(meta.page(0).toString());
+        EntityType type = EntityType.valueOf(meta.page(1).toString());
+        int troopLevel = Integer.parseInt(meta.page(2).toString());
+        int numberOfTroops = Integer.parseInt(meta.page(3).toString());
+
+       return new CardInfo(cardName, elixirCost, type, troopLevel, numberOfTroops);
+    }
+
     /**
         * Finds the block a player is looking at within a 20-block range.
         * @param player The player whose line of sight is being traced.

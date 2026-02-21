@@ -14,9 +14,12 @@ public class SwingHand implements Listener {
     @EventHandler
     public void onSwingHand(PlayerInteractEvent event) {
         if (event.getAction().toString().contains("RIGHT_CLICK")) {
-            Block block = UseCard.findPlacementBlock(event.getPlayer());
+            if (UseCard.isCard(event.getItem())) {
+                event.setCancelled(true); // dont let player open the book
+                Block block = UseCard.findPlacementBlock(event.getPlayer());
 
-            event.getPlayer().sendMessage("You are looking at block: " + block.getType().toString() + "at " + block.getLocation().toString());
+                event.getPlayer().sendMessage("You are looking at block: " + block.getType().toString() + "at " + block.getLocation().toString());
+            }
         }
     }
 }

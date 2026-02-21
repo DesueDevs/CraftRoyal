@@ -41,8 +41,8 @@ public class CreatureSpawn implements Listener {
                 TroopID
         );
         entity.setInvulnerable(true);
-//        Mob mobEntity = (Mob) entity;
-//        mobEntity.setAI(false); // Disable default AI to prevent interference
+
+        // TODO: Replace the switch statement with a troop registry in the future
         Troop troop = null;
         switch (creatureSpawnEvent.getEntityType()) {
             case VINDICATOR:

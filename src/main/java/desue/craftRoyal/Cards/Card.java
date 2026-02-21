@@ -5,6 +5,8 @@ import desue.craftRoyal.Troops.Troop;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Logger;
@@ -14,13 +16,13 @@ public class Card {
 
     protected Player player = null;
     protected int elixerCost = 0;
-    protected Troop spawnedTroop = null;
+    protected EntityType spawnedType = null;
     protected int spawnTroopLevel = 0;
     protected int numberOfTroops = 0;
-    public Card(Player player, int elixerCost, Troop spawnedTroop, int spawnTroopLevel, int numberOfTroops) {
+    public Card(Player player, int elixerCost, EntityType spawnedType, int spawnTroopLevel, int numberOfTroops) {
         this.player = player;
         this.elixerCost = elixerCost;
-        this.spawnedTroop = spawnedTroop;
+        this.spawnedType = spawnedType;
         this.spawnTroopLevel = spawnTroopLevel;
         this.numberOfTroops = numberOfTroops;
     }
@@ -31,8 +33,8 @@ public class Card {
             logger.warning("Card: SpawnTroops called but player is null");
             return;
         }
-        if (this.spawnedTroop == null) {
-            logger.warning("Card: SpawnTroops called but spawnedTroop is null");
+        if (this.spawnedType == null) {
+            logger.warning("Card: SpawnTroops called but spawnedType is null");
             return;
         }
         if (this.numberOfTroops <= 0) {
@@ -61,11 +63,11 @@ public class Card {
         Block spawnBlock = SpawnLoc.getWorld().getBlockAt(SpawnLoc);
         // Spawn Flying troops in air
         int heightInc = 0;
-        if(this.spawnedTroop.troopType == Troop.TroopTypes.Flying) {
-            heightInc = 2;
-        }
+//        if(this.spawnedTroop.troopType == Troop.TroopTypes.Flying) {
+//            heightInc = 2;
+//        }
         for (int i = 0; i < this.numberOfTroops; i++) {
-            SpawnLoc.getWorld().spawn(spawnBlock.getLocation().add(0,heightInc,0), this.spawnedTroop.mob.getClass());
+            SpawnLoc.getWorld().spawnEntity(spawnBlock.getLocation().add(0,heightInc,0), this.spawnedType);
         }
     }
 }
